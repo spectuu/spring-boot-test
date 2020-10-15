@@ -1,0 +1,48 @@
+## SERVIDOR
+server:
+  port: 8080
+  compression:
+    enabled: true
+  error:
+    include-stacktrace: never
+  servlet:
+    context-path: /
+
+## APLICACION
+spring:
+  application:
+    name: user-test
+    version: v1.0.0
+    restPort: ${server.port}
+  messages:
+    encoding: UTF-8
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    platform: mysql
+    url: jdbc:mysql://127.0.0.1:3306/data?serverTimezone=GMT-5 # Remplazar por tu base de datos
+    username: root # Remplazar por el usuario de acceso
+    password: root # Remplazar por la clave del usuario
+  devtools:
+    add-properties: true
+    livereload:
+      enabled: true
+
+## APPLICATION
+application:
+  log: /logs/
+  services:
+    users: /api/v1/users
+
+## LOGGGER
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO
+    co.com.aruma: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss:SSS} [%5p] [%t] - %15c{1}:[%4L] - %m%n" 
+
+
+
