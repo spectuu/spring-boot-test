@@ -1,4 +1,4 @@
-package co.com.aruma.entity;
+package me.itoxic.entity;
 
 import lombok.Data;
 

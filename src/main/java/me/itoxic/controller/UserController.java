@@ -1,10 +1,10 @@
-package co.com.aruma.controller;
+package me.itoxic.controller;
 
-import co.com.aruma.service.UserService;
+import me.itoxic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import co.com.aruma.dto.Response;
+import me.itoxic.dto.Response;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

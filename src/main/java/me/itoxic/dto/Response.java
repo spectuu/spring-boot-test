@@ -1,4 +1,4 @@
-package co.com.aruma.dto;
+package me.itoxic.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

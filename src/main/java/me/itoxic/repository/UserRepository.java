@@ -1,6 +1,6 @@
-package co.com.aruma.repository;
+package me.itoxic.repository;
 
-import co.com.aruma.entity.User;
+import me.itoxic.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.io.Serializable;

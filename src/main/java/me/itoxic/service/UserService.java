@@ -1,8 +1,9 @@
-package co.com.aruma.service;
+package me.itoxic.service;
 
-import co.com.aruma.dto.*;
-import co.com.aruma.entity.User;
-import co.com.aruma.repository.*;
+import me.itoxic.dto.Response;
+import me.itoxic.entity.User;
+import me.itoxic.dto.UserDTO;
+import me.itoxic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

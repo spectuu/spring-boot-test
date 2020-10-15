@@ -1,4 +1,4 @@
-package co.com.aruma.dto;
+package me.itoxic.dto;
 
 import lombok.Builder;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package co.com.aruma.utils;
+package me.itoxic.utils;
 
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
