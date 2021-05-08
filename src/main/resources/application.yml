@@ -21,9 +21,9 @@ spring:
       ddl-auto: update
   datasource:
     platform: mysql
-    url: jdbc:mysql://127.0.0.1:3306/data?serverTimezone=GMT-5 # Remplazar por tu base de datos
-    username: root # Remplazar por el usuario de acceso
-    password: root # Remplazar por la clave del usuario
+    url: jdbc:mysql://db4free.net:3306/spectuportfolio # Remplazar por tu base de datos
+    username: spectu # Remplazar por el usuario de acceso
+    password: F10w3r*_ # Remplazar por la clave del usuario
   devtools:
     add-properties: true
     livereload:
