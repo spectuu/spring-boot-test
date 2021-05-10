@@ -1,11 +1,13 @@
 package me.itoxic.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.*;
 
 @Data
 @Entity
+@Builder
 @Table(name = "users")
 public class User {
 
@@ -13,7 +15,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private String name;
+    @Column(unique=true)
     private String email;
+    private String password;
+    private int coins;
 
 }

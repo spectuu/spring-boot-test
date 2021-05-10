@@ -1,8 +1,7 @@
 package me.itoxic.service;
 
-import me.itoxic.dto.Response;
+import me.itoxic.dto.*;
 import me.itoxic.entity.User;
-import me.itoxic.dto.UserDTO;
 import me.itoxic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,11 +34,70 @@ public class UserService {
         for(User user : users)
             dtos.add(UserDTO.builder()
                      .email(user.getEmail())
-                     .name(user.getName())
+                     .coins(user.getCoins())
                      .build());
 
         return dtos;
 
+    }
+
+    public Response userDefinir(InTransaccionDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+
+        if(user == null){
+
+            return Response.builder().message("El usuario no existe").build();
+
+        }
+
+        user.setCoins(dto.getCoins());
+        userRepository.save(user);
+        return Response.builder().message("OK").build();
+
+
+    }
+
+    public Response userRemove(InTransaccionDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+        if(user == null){
+
+            return Response.builder().message("El usuario no existe").build();
+
+        }
+
+        user.setCoins(user.getCoins() - dto.getCoins());
+        userRepository.save(user);
+        return Response.builder().message("OK").build();
+
+    }
+
+    public Response userAgregar(InTransaccionDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+        if(user == null){
+
+            return Response.builder().message("El usuario no existe").build();
+
+        }else{
+
+            user.setCoins(user.getCoins() + dto.getCoins());
+            userRepository.save(user);
+            return Response.builder().message("OK").build();
+        }
+
+
+    }
+
+    public Response userlogin(InDataDTO dto) {
+        User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
+        OutCoinsDTO outCoinsDTO = OutCoinsDTO.builder().coins(user.getCoins()).build();
+        if(user == null) {
+
+            return Response.builder().message("El Usuario no existe").build();
+        }
+        return Response.builder().data(outCoinsDTO).message("OK").build();
     }
 
 }
