@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InCoinsDTO {
 
+    private String password;
     private String email;
     private int coins;
 

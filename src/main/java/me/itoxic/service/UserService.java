@@ -5,9 +5,12 @@ import lombok.NoArgsConstructor;
 import me.itoxic.dto.*;
 import me.itoxic.entity.User;
 import me.itoxic.repository.UserRepository;
+import org.hibernate.annotations.RowId;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.sql.RowSet;
 import java.util.*;
 
 @AllArgsConstructor
@@ -38,6 +41,7 @@ public class UserService {
         for (User user : users)
             dtos.add(UserDTO.builder()
                     .email(user.getEmail())
+                    .password(user.getPassword())
                     .build());
 
         return dtos;
@@ -61,8 +65,7 @@ public class UserService {
 
     public Response addCoins(InCoinsDTO dto) {
 
-        User user = userRepository.findByEmail(dto.getEmail());
-        OutCoinsDTO outCoinsDTO = OutCoinsDTO.builder().coins(dto.getCoins()).build();
+        User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
         if (user == null) {
 
             return Response.builder().message("El usuario no esta agregado en la base de datos.").build();
@@ -77,7 +80,7 @@ public class UserService {
 
     public Response removeCoins(InCoinsDTO dto) {
 
-        User user = userRepository.findByEmail(dto.getEmail());
+        User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
         if (user == null) {
 
             return Response.builder().message("El usuario no esta agregado en la base de datos.").build();
@@ -91,7 +94,7 @@ public class UserService {
 
     public Response setCoins(InCoinsDTO dto) {
 
-        User user = userRepository.findByEmail(dto.getEmail());
+        User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
 
         if (user == null) {
 
@@ -105,31 +108,33 @@ public class UserService {
     }
 
     public Response userlogin(InDataDTO dto) {
+
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
 
-        if (user == null) {
+        if (user != null) {
+            return Response.builder().data(user.getId()).message("OK").build();
+
+        }else{
 
             return Response.builder().message("El Usuario no existe").build();
+
         }
-
-        return Response.builder().data(user.getId()).message("OK").build();
-
     }
 
-    public Response deleteAccount(InDataDTO dto){
+    public Response deleteAccount(InDataDTO dto) {
 
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
 
         if(user == null){
 
-
-            return  Response.builder().message("El usuario no esta en la base de datos.").build();
+            return Response.builder().message("El Usuario no existe").build();
+            
         }
 
-        user = User.builder().email(dto.getEmail()).password(dto.getPassword()).build();
-        userRepository.save(user);
-        return Response.builder().data(user.getId()).message("OK").build();
-        
+            userRepository.delete(user);
+
+            return Response.builder().data(user.getId()).message("OK").build();
+
     }
 
 }

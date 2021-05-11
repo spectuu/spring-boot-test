@@ -21,6 +21,7 @@ public class UserController {
 
     @PostMapping("/login")
     public Response login(@RequestBody InDataDTO dto) {
+
         return this.userService.userlogin(dto);
 
     }
@@ -38,8 +39,8 @@ public class UserController {
 
     }
 
-    @PostMapping("setCoins")
-    public Response setCoins(InCoinsDTO dto){
+    @PostMapping("/setCoins")
+    public Response setCoins(@RequestBody InCoinsDTO dto){
 
         return this.userService.setCoins(dto);
 
@@ -51,7 +52,7 @@ public class UserController {
 
     }
 
-    @DeleteMapping("/deleAccount")
+    @DeleteMapping("/deleteAccount")
     public Response deleteAccount(@RequestBody InDataDTO dto){
 
 
