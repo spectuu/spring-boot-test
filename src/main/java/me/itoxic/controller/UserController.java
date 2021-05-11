@@ -51,4 +51,12 @@ public class UserController {
 
     }
 
+    @DeleteMapping("/deleAccount")
+    public Response deleteAccount(@RequestBody InDataDTO dto){
+
+
+        return this.userService.deleteAccount(dto);
+
+    }
+
 }

@@ -31,24 +31,24 @@ public class UserService {
         return toDTO(users.toArray(new User[users.size()]));
     }
 
-    public List<UserDTO> toDTO(User...users) {
+    public List<UserDTO> toDTO(User... users) {
 
         List<UserDTO> dtos = new ArrayList<>();
 
-        for(User user : users)
+        for (User user : users)
             dtos.add(UserDTO.builder()
-                     .email(user.getEmail())
-                     .build());
+                    .email(user.getEmail())
+                    .build());
 
         return dtos;
 
     }
 
-    public Response createAccount(InDataDTO dto){
+    public Response createAccount(InDataDTO dto) {
 
         User user = userRepository.findByEmail(dto.getEmail());
 
-        if(user != null) {
+        if (user != null) {
 
             return Response.builder().message("El Usuario existe").build();
         }
@@ -59,13 +59,13 @@ public class UserService {
 
     }
 
-    public Response addCoins(InCoinsDTO dto){
+    public Response addCoins(InCoinsDTO dto) {
 
         User user = userRepository.findByEmail(dto.getEmail());
         OutCoinsDTO outCoinsDTO = OutCoinsDTO.builder().coins(dto.getCoins()).build();
-        if(user == null){
+        if (user == null) {
 
-            return  Response.builder().message("El usuario no esta agregado en la base de datos.").build();
+            return Response.builder().message("El usuario no esta agregado en la base de datos.").build();
 
         }
 
@@ -75,45 +75,61 @@ public class UserService {
 
     }
 
-    public Response removeCoins(InCoinsDTO dto){
+    public Response removeCoins(InCoinsDTO dto) {
 
         User user = userRepository.findByEmail(dto.getEmail());
         if (user == null) {
 
-            return  Response.builder().message("El usuario no esta agregado en la base de datos.").build();
+            return Response.builder().message("El usuario no esta agregado en la base de datos.").build();
 
         }
 
         user.setCoins((user.getCoins() - dto.getCoins()));
         userRepository.save(user);
-        return  Response.builder().data(user.getCoins()).build();
+        return Response.builder().data(user.getCoins()).build();
     }
 
-    public Response setCoins(InCoinsDTO dto){
+    public Response setCoins(InCoinsDTO dto) {
 
         User user = userRepository.findByEmail(dto.getEmail());
 
-        if(user == null){
+        if (user == null) {
 
-            return  Response.builder().message("El usuaro no esta agregado en la base de datos.").build();
+            return Response.builder().message("El usuaro no esta agregado en la base de datos.").build();
 
         }
 
         user.setCoins(dto.getCoins());
         userRepository.save(user);
-        return  Response.builder().data(user.getCoins()).build();
+        return Response.builder().data(user.getCoins()).build();
     }
 
     public Response userlogin(InDataDTO dto) {
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
 
-        if(user == null) {
+        if (user == null) {
 
             return Response.builder().message("El Usuario no existe").build();
         }
 
         return Response.builder().data(user.getId()).message("OK").build();
 
+    }
+
+    public Response deleteAccount(InDataDTO dto){
+
+        User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
+
+        if(user == null){
+
+
+            return  Response.builder().message("El usuario no esta en la base de datos.").build();
+        }
+
+        user = User.builder().email(dto.getEmail()).password(dto.getPassword()).build();
+        userRepository.save(user);
+        return Response.builder().data(user.getId()).message("OK").build();
+        
     }
 
 }
