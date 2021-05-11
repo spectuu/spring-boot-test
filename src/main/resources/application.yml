@@ -21,9 +21,9 @@ spring:
       ddl-auto: update
   datasource:
     platform: mysql
-    url: jdbc:mysql://db4free.net:3306/spectuportfolio # Remplazar por tu base de datos
+    url: jdbc:mysql://31.14.17.197:3306/portfolio # Remplazar por tu base de datos
     username: spectu # Remplazar por el usuario de acceso
-    password: F10w3r*_ # Remplazar por la clave del usuario
+    password: fg*sfm23MLN # Remplazar por la clave del usuario
   devtools:
     add-properties: true
     livereload:

@@ -1,5 +1,7 @@
 package me.itoxic.service;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import me.itoxic.dto.*;
 import me.itoxic.entity.User;
 import me.itoxic.repository.UserRepository;
@@ -8,6 +10,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Service
 public class UserService {
 
@@ -34,70 +38,82 @@ public class UserService {
         for(User user : users)
             dtos.add(UserDTO.builder()
                      .email(user.getEmail())
-                     .coins(user.getCoins())
                      .build());
 
         return dtos;
 
     }
 
-    public Response userDefinir(InTransaccionDTO dto){
+    public Response createAccount(InDataDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+
+        if(user != null) {
+
+            return Response.builder().message("El Usuario existe").build();
+        }
+
+        user = User.builder().email(dto.getEmail()).password(dto.getPassword()).build();
+        userRepository.save(user);
+        return Response.builder().data(user.getId()).message("OK").build();
+
+    }
+
+    public Response addCoins(InCoinsDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+        OutCoinsDTO outCoinsDTO = OutCoinsDTO.builder().coins(dto.getCoins()).build();
+        if(user == null){
+
+            return  Response.builder().message("El usuario no esta agregado en la base de datos.").build();
+
+        }
+
+        user.setCoins(user.getCoins() + dto.getCoins());
+        userRepository.save(user);
+        return Response.builder().data(user.getCoins()).build();
+
+    }
+
+    public Response removeCoins(InCoinsDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+        if (user == null) {
+
+            return  Response.builder().message("El usuario no esta agregado en la base de datos.").build();
+
+        }
+
+        user.setCoins((user.getCoins() - dto.getCoins()));
+        userRepository.save(user);
+        return  Response.builder().data(user.getCoins()).build();
+    }
+
+    public Response setCoins(InCoinsDTO dto){
 
         User user = userRepository.findByEmail(dto.getEmail());
 
         if(user == null){
 
-            return Response.builder().message("El usuario no existe").build();
+            return  Response.builder().message("El usuaro no esta agregado en la base de datos.").build();
 
         }
 
         user.setCoins(dto.getCoins());
         userRepository.save(user);
-        return Response.builder().message("OK").build();
-
-
-    }
-
-    public Response userRemove(InTransaccionDTO dto){
-
-        User user = userRepository.findByEmail(dto.getEmail());
-        if(user == null){
-
-            return Response.builder().message("El usuario no existe").build();
-
-        }
-
-        user.setCoins(user.getCoins() - dto.getCoins());
-        userRepository.save(user);
-        return Response.builder().message("OK").build();
-
-    }
-
-    public Response userAgregar(InTransaccionDTO dto){
-
-        User user = userRepository.findByEmail(dto.getEmail());
-        if(user == null){
-
-            return Response.builder().message("El usuario no existe").build();
-
-        }else{
-
-            user.setCoins(user.getCoins() + dto.getCoins());
-            userRepository.save(user);
-            return Response.builder().message("OK").build();
-        }
-
-
+        return  Response.builder().data(user.getCoins()).build();
     }
 
     public Response userlogin(InDataDTO dto) {
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
-        OutCoinsDTO outCoinsDTO = OutCoinsDTO.builder().coins(user.getCoins()).build();
+
         if(user == null) {
 
             return Response.builder().message("El Usuario no existe").build();
         }
-        return Response.builder().data(outCoinsDTO).message("OK").build();
+
+        return Response.builder().data(user.getId()).message("OK").build();
+
     }
 
 }

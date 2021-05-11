@@ -10,8 +10,8 @@ public interface UserRepository extends JpaRepository<User, Long>, Serializable 
 
     List<User> findAll();
 
-    User findByEmail(String email);
-
     User findByPasswordAndEmail(String password, String email);
+
+    User findByEmail(String email);
 
 }
