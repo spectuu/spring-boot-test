@@ -3,6 +3,7 @@ package me.itoxic.controller;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import me.itoxic.dto.*;
+import me.itoxic.entity.User;
 import me.itoxic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,25 @@ public class UserController {
 
     @Autowired
     UserService userService;
+
+    @GetMapping("/findid/{id}")
+    private Response getById(@PathVariable int id) {
+
+        System.out.println("LLEGO = " + id);
+
+
+        return this.userService.getUserDataId(id);
+
+    }
+
+
+    @GetMapping("/findcoins/{coins}")
+    private  Response getByCoins(@PathVariable int coins){
+
+        System.out.println("COINS");
+
+        return this.userService.getUserDataCoins(coins);
+    }
 
     @PostMapping("/login")
     public Response login(@RequestBody InDataDTO dto) {
@@ -54,10 +74,7 @@ public class UserController {
 
     @DeleteMapping("/deleteAccount")
     public Response deleteAccount(@RequestBody InDataDTO dto){
-
-
         return this.userService.deleteAccount(dto);
-
     }
 
 }

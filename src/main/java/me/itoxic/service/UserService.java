@@ -1,5 +1,6 @@
 package me.itoxic.service;
 
+import com.sun.xml.bind.v2.model.core.ID;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import me.itoxic.dto.*;
@@ -18,6 +19,7 @@ import java.util.*;
 @Service
 public class UserService {
 
+    public Response userDataId;
     @Autowired
     UserRepository userRepository;
 
@@ -42,6 +44,7 @@ public class UserService {
             dtos.add(UserDTO.builder()
                     .email(user.getEmail())
                     .password(user.getPassword())
+                    .coins(user.getCoins())
                     .build());
 
         return dtos;
@@ -112,6 +115,7 @@ public class UserService {
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
 
         if (user != null) {
+
             return Response.builder().data(user.getId()).message("OK").build();
 
         }else{
@@ -121,7 +125,23 @@ public class UserService {
         }
     }
 
+    public Response getUserDataId(long id){
+
+        User user = userRepository.findById(id);
+        OutIdDTO outIdDTO = OutIdDTO.builder().email(user.getEmail()).coins(user.getCoins()).build();
+
+        if(user == null){
+
+            return Response.builder().message("El Usuario no existe").build();
+
+        }
+
+        return Response.builder().data(outIdDTO).build();
+
+    }
     public Response deleteAccount(InDataDTO dto) {
+
+        System.out.println(dto.getPassword() + ", " + dto.getEmail());
 
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
 
@@ -137,4 +157,25 @@ public class UserService {
 
     }
 
+    public Response getUserDataCoins(int coins){
+
+        List<User> users = userRepository.findAllByCoins(coins);
+
+        if (users == null) {
+
+            return Response.builder().message("no hay usuarios con este valor").build();
+
+        }
+
+        List<OutIdDTO> lista = new ArrayList<>();
+
+        for (User user1: users){
+                   lista.add(OutIdDTO.builder()
+                    .email(user1.getEmail())
+                    .coins(user1.getCoins()).build());
+        }
+
+        return  Response.builder().data(lista).message("OK").build();
+
+    }
 }

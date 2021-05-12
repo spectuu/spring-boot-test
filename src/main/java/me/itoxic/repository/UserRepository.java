@@ -14,4 +14,8 @@ public interface UserRepository extends JpaRepository<User, Long>, Serializable 
 
     User findByEmail(String email);
 
+    User findById(long id);
+
+    List<User> findAllByCoins(int coins);
+
 }
