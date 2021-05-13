@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InDataDTO {
+public class OutPasswordDTO {
 
-    private String email;
+    private Long id;
     private String password;
-    private int coins;
 
 }

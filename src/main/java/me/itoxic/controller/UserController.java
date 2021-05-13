@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @AllArgsConstructor
 @NoArgsConstructor
 @RequestMapping("${application.services.users}")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -27,6 +28,13 @@ public class UserController {
 
 
         return this.userService.getUserDataId(id);
+
+    }
+
+    @GetMapping("/findpassword/{password}")
+    private Response getByPassword(@PathVariable String password){
+
+        return  this.userService.getUserDataPassword(password);
 
     }
 
@@ -73,7 +81,8 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteAccount")
-    public Response deleteAccount(@RequestBody InDataDTO dto){
+    public Response deleteAccount(@RequestBody InPasswordDTO dto)
+    {
         return this.userService.deleteAccount(dto);
     }
 

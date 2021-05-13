@@ -60,7 +60,7 @@ public class UserService {
             return Response.builder().message("El Usuario existe").build();
         }
 
-        user = User.builder().email(dto.getEmail()).password(dto.getPassword()).build();
+        user = User.builder().email(dto.getEmail()).password(dto.getPassword()).coins(dto.getCoins()).build();
         userRepository.save(user);
         return Response.builder().data(user.getId()).message("OK").build();
 
@@ -76,14 +76,16 @@ public class UserService {
         }
 
         user.setCoins(user.getCoins() + dto.getCoins());
+        if(user.getCoins() <= 0)
+            user.setCoins(0);
         userRepository.save(user);
-        return Response.builder().data(user.getCoins()).build();
-
+        return Response.builder().message("Las coins fueron agregadas!").data(user.getCoins()).build();
     }
 
     public Response removeCoins(InCoinsDTO dto) {
 
         User user = userRepository.findByPasswordAndEmail(dto.getPassword(), dto.getEmail());
+
         if (user == null) {
 
             return Response.builder().message("El usuario no esta agregado en la base de datos.").build();
@@ -91,8 +93,10 @@ public class UserService {
         }
 
         user.setCoins((user.getCoins() - dto.getCoins()));
+        if(user.getCoins() <= 0)
+            user.setCoins(0);
         userRepository.save(user);
-        return Response.builder().data(user.getCoins()).build();
+        return Response.builder().message("Las coins fueron removidas!").data(user.getCoins()).build();
     }
 
     public Response setCoins(InCoinsDTO dto) {
@@ -105,9 +109,12 @@ public class UserService {
 
         }
 
+
         user.setCoins(dto.getCoins());
+        if(user.getCoins() <= 0)
+        user.setCoins(0);
         userRepository.save(user);
-        return Response.builder().data(user.getCoins()).build();
+        return Response.builder().message("Se han establecido las coins!").data(user.getCoins()).build();
     }
 
     public Response userlogin(InDataDTO dto) {
@@ -116,7 +123,7 @@ public class UserService {
 
         if (user != null) {
 
-            return Response.builder().data(user.getId()).message("OK").build();
+            return Response.builder().message("Coins: " + user.getCoins()).data(user.getCoins()).build();
 
         }else{
 
@@ -139,7 +146,7 @@ public class UserService {
         return Response.builder().data(outIdDTO).build();
 
     }
-    public Response deleteAccount(InDataDTO dto) {
+    public Response deleteAccount(InPasswordDTO dto) {
 
         System.out.println(dto.getPassword() + ", " + dto.getEmail());
 
@@ -152,8 +159,7 @@ public class UserService {
         }
 
             userRepository.delete(user);
-
-            return Response.builder().data(user.getId()).message("OK").build();
+            return Response.builder().message("El usuario ha sido borrado...").data(user.getId()).message("OK").build();
 
     }
 
@@ -178,4 +184,31 @@ public class UserService {
         return  Response.builder().data(lista).message("OK").build();
 
     }
+
+    public Response getUserDataPassword(String password){
+
+        List<User> users = userRepository.findByPassword(password);
+
+        if(users == null){
+
+            return Response.builder().message("no hay usuarios con este valor").build();
+
+        }
+
+        List<OutPasswordDTO> dtos = new ArrayList<>();
+
+        for(User usersPassword: users){
+
+                dtos.add(OutPasswordDTO.builder()
+                        .id(usersPassword.getId())
+                        .password(usersPassword.getPassword())
+                        .build());
+
+
+        }
+
+        return Response.builder().data(dtos).message("OK").build();
+
+    }
+
 }

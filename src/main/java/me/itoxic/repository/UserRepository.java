@@ -18,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Long>, Serializable 
 
     List<User> findAllByCoins(int coins);
 
+    List<User> findByPassword(String password);
+
 }
