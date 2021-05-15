@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.itoxic.dtoProduct.InCreateProductDTO;
 import me.itoxic.dtoProduct.InDeleteProductDTO;
+import me.itoxic.dtoProduct.InSetIDDTO;
 import me.itoxic.dtoProduct.InUpdateProductDTO;
 import me.itoxic.dtoUser.Response;
 import me.itoxic.service.ProductService;
@@ -25,8 +26,8 @@ public class ProductController {
     @GetMapping("/find/allProducts")
     private Response findAllProducts(){
 
-        System.out.println("OK");
         return this.productService.allProducts();
+
     }
 
     @PostMapping("/createProduct")
@@ -47,6 +48,13 @@ public class ProductController {
     private Response updateProduct(@RequestBody InUpdateProductDTO dto){
 
         return this.productService.updatePrice(dto);
+
+    }
+
+    @GetMapping("/findId/{id}")
+    private Response getProductId(@PathVariable long id){
+
+        return this.productService.finById(id);
 
     }
 }

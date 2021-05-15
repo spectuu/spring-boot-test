@@ -2,9 +2,7 @@ package me.itoxic.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import me.itoxic.dtoProduct.InCreateProductDTO;
-import me.itoxic.dtoProduct.InDeleteProductDTO;
-import me.itoxic.dtoProduct.InUpdateProductDTO;
+import me.itoxic.dtoProduct.*;
 import me.itoxic.dtoUser.Response;
 
 import me.itoxic.entity.Product;
@@ -12,7 +10,10 @@ import me.itoxic.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -70,9 +71,36 @@ public class ProductService {
        }
 
        product.setPrice(dto.getPrice());
+
+       if(product.getPrice() <= 0){
+           product.setPrice(1);
+           productRepository.save(product);
+           return Response.builder().message("El precio no puede ser igual a cero.").data("Price = " + product.getPrice()).build();
+       }
+
        productRepository.save(product);
-       return Response.builder().message("El precio del producto se actualizo!").data(product.getPrice()).build();
+       return Response.builder().message("El precio del producto se actualizo!").data("Price = " + product.getPrice()).build();
 
    }
+
+   public Response finById(Long id){
+
+    Optional<Product> productOptional = productRepository.findById(id);
+
+    if(productOptional.isPresent()) {
+
+        Product product = productOptional.get();
+
+        return Response.builder().data(product.getProductName()).build();
+
+    }
+
+    return Response.builder().message("No eiste el producto").build();
+
+
+   }
+
+
+
 }
 
