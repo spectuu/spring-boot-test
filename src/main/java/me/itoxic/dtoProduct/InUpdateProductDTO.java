@@ -1,4 +1,5 @@
-package me.itoxic.dto;
+package me.itoxic.dtoProduct;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InIdDTO {
+public class InUpdateProductDTO {
 
-   private int id;
+    private String productName;
+    private int price;
+
 
 }

@@ -1,4 +1,5 @@
-package me.itoxic.dto;
+package me.itoxic.dtoUser;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +10,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OutCoinsDTO {
+public class InCoinsDTO {
 
+    private String password;
+    private String email;
     private int coins;
-
-
 
 }

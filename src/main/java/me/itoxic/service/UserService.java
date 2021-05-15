@@ -1,17 +1,13 @@
 package me.itoxic.service;
 
-import com.sun.xml.bind.v2.model.core.ID;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import me.itoxic.dto.*;
+import me.itoxic.dtoUser.*;
 import me.itoxic.entity.User;
 import me.itoxic.repository.UserRepository;
-import org.hibernate.annotations.RowId;
-import org.hibernate.annotations.SQLDelete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.sql.RowSet;
 import java.util.*;
 
 @AllArgsConstructor
@@ -19,7 +15,6 @@ import java.util.*;
 @Service
 public class UserService {
 
-    public Response userDataId;
     @Autowired
     UserRepository userRepository;
 

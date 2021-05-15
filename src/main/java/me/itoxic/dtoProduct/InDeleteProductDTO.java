@@ -1,4 +1,4 @@
-package me.itoxic.dto;
+package me.itoxic.dtoProduct;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InDataDTO {
+public class InDeleteProductDTO {
 
-    private String email;
-    private String password;
-    private int coins;
+    private String productName;
 
 }

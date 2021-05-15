@@ -2,8 +2,7 @@ package me.itoxic.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
-import me.itoxic.dto.*;
-import me.itoxic.entity.User;
+import me.itoxic.dtoUser.*;
 import me.itoxic.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

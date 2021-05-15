@@ -1,4 +1,4 @@
-package me.itoxic.dto;
+package me.itoxic.dtoUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OutPasswordDTO {
+public class ProductDTO {
 
-    private Long id;
-    private String password;
+    private String productName;
+    private String typeOfProduct;
+    private int price;
 
 }
