@@ -1,6 +1,5 @@
 package me.itoxic.dtoProduct;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,8 +9,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InSetIDDTO {
+public class OutUserProductsDTO {
 
+    private String email;
     private String productName;
-    private Long id;
+    private int Quantity;
+
+
 }

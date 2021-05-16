@@ -13,6 +13,7 @@ public class InCreateProductDTO {
 
     private String productName;
     private String typeOfProduct;
+    private int AvailableQuantity;
     private int price;
 
 }

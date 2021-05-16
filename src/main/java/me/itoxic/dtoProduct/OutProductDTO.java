@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class InUpdateProductDTO {
+public class OutProductDTO {
 
     private String productName;
+    private String typeOfProduct;
     private int AvailableQuantity;
     private int price;
-
 
 }
