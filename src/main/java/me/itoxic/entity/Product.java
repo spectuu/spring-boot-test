@@ -21,8 +21,8 @@ public class Product {
 
     @Column(unique=true)
     private String productName;
-
     private String typeOfProduct;
+    private int AvailableQuantity;
     private int price;
 
 }

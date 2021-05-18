@@ -26,23 +26,42 @@ public class ProductService {
    public Response allProducts(){
 
         List<Product> products = productRepository.findAll();
-        return Response.builder().data(products).message("OK").build();
+        return Response.builder().data(products).build();
 
         }
 
-   public Response createProduct(InCreateProductDTO dto){
+   public Response createProduct(InCreateProductDTO dto) {
 
        Product product = productRepository.findByProductName(dto.getProductName());
 
-       if(product != null){
+       if (product != null) {
 
            return Response.builder().message("Este producto ya existe").build();
 
        }
 
-       product = Product.builder().productName(dto.getProductName()).typeOfProduct(dto.getTypeOfProduct()).price(dto.getPrice()).build();
+       product = Product.builder()
+               .productName(dto.getProductName())
+               .typeOfProduct(dto.getTypeOfProduct())
+               .AvailableQuantity(dto.getAvailableQuantity())
+               .price(dto.getPrice()).build();
+
+       if (product.getPrice() <= 0) {
+
+           return Response.builder().message("El precio no puede ser igual a cero.").build();
+
+       }
+
+       if (product.getAvailableQuantity() < 0) {
+
+           return Response.builder().message("El cantidad disponible no puede ser igual a cero.").build();
+
+       }
+
        productRepository.save(product);
+
        return Response.builder().message("El producto se ha creado!").data(product.getId()).build();
+
    }
 
    public Response deleteProduct(InDeleteProductDTO dto){
@@ -70,14 +89,22 @@ public class ProductService {
 
        }
 
+       product.setProductName(dto.getProductName());
+       product.setAvailableQuantity(dto.getAvailableQuantity());
+       product.setTypeOfProduct(dto.getTypeOfProduct());
        product.setPrice(dto.getPrice());
 
-       if(product.getPrice() <= 0){
-           product.setPrice(1);
-           productRepository.save(product);
-           return Response.builder().message("El precio no puede ser igual a cero.").data("Price = " + product.getPrice()).build();
+       if(product.getAvailableQuantity() < 0){
+
+           return Response.builder().message("la cantidad disponible no puede ser igual a cero.").build();
+
        }
 
+       if(product.getPrice() <= 0){
+
+           return Response.builder().message("El precio no puede ser igual a cero.").build();
+
+       }
        productRepository.save(product);
        return Response.builder().message("El precio del producto se actualizo!").data("Price = " + product.getPrice()).build();
 
