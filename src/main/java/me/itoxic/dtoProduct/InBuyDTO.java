@@ -14,5 +14,6 @@ public class InBuyDTO {
 
     private String email;
     private String productName;
+    private int quantity;
 
 }

@@ -13,7 +13,7 @@ public class OutUserProductsDTO {
 
     private String email;
     private String productName;
-    private int Quantity;
+    private int quantity;
 
 
 }

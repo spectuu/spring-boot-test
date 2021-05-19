@@ -12,9 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InUpdateProductDTO {
 
+    private String productChange;
     private String productName;
     private String typeOfProduct;
-    private int AvailableQuantity;
+    private int availableQuantity;
     private int price;
 
 
