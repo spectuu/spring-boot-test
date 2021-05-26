@@ -12,5 +12,6 @@ import lombok.NoArgsConstructor;
 public class InDeleteProductDTO {
 
     private String productName;
+    private String email;
 
 }
