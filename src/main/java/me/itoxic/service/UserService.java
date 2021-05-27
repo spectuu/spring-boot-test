@@ -2,8 +2,12 @@ package me.itoxic.service;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import me.itoxic.dtoProduct.InBuyDTO;
+import me.itoxic.dtoProduct.OutUserProductsDTO;
 import me.itoxic.dtoUser.*;
+import me.itoxic.entity.Product;
 import me.itoxic.entity.User;
+import me.itoxic.repository.ProductRepository;
 import me.itoxic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +21,9 @@ public class UserService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    ProductRepository productRepository;
 
     public Response ping() {
         return Response.builder().message("OK").build();
@@ -203,6 +210,20 @@ public class UserService {
         }
 
         return Response.builder().data(dtos).message("OK").build();
+
+    }
+
+    public Response userProducts(String email){
+
+        User user = userRepository.findByEmail(email);
+
+        if(user == null){
+
+            return Response.builder().message("El usuario no esta agregado").build();
+
+        }
+
+        return Response.builder().data(user.getProducts()).build();
 
     }
 

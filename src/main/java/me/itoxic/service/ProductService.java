@@ -3,15 +3,19 @@ package me.itoxic.service;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import me.itoxic.dtoProduct.*;
+import me.itoxic.dtoUser.InEmailDTO;
 import me.itoxic.dtoUser.Response;
 
 import me.itoxic.entity.Product;
+import me.itoxic.entity.User;
 import me.itoxic.repository.ProductRepository;
+import me.itoxic.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +26,9 @@ public class ProductService {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    UserRepository userRepository;
 
    public Response allProducts(){
 
@@ -36,7 +43,7 @@ public class ProductService {
 
        if (product != null) {
 
-           return Response.builder().message("Este producto ya existe").build();
+           return Response.builder().message("Este producto ya existe.").build();
 
        }
 
@@ -54,13 +61,12 @@ public class ProductService {
 
        if (product.getAvailableQuantity() < 0) {
 
-           return Response.builder().message("El cantidad disponible no puede ser igual a cero.").build();
+           return Response.builder().message("El cantidad disponible no puede ser menor a cero.").build();
 
        }
 
        productRepository.save(product);
-
-       return Response.builder().message("El producto se ha creado!").data(product.getId()).build();
+       return Response.builder().message("El producto se ha creado!").data(product).build();
 
    }
 
@@ -68,9 +74,17 @@ public class ProductService {
 
        Product product = productRepository.findByProductName(dto.getProductName());
 
+       List<User> users = userRepository.findAll();
+
        if(product == null){
 
-           return Response.builder().message("El producto no existe").build();
+           return Response.builder().message("El producto no existe.").build();
+
+       }
+
+       for(User user1: users){
+
+           users.remove(user1.getProducts().remove(product));
 
        }
 
@@ -79,34 +93,44 @@ public class ProductService {
 
    }
 
-   public Response updatePrice(InUpdateProductDTO dto){
+   public Response updateProduct(InUpdateProductDTO dto){
 
-       Product product = productRepository.findByProductName(dto.getProductName());
+       Product productChange = productRepository.findByProductName(dto.getProductChange());
+        Product productName = productRepository.findByProductName(dto.getProductName());
 
-       if(product == null){
+       if(productChange == null){
 
-           return Response.builder().message("El producto no existe").build();
-
-       }
-
-       product.setProductName(dto.getProductName());
-       product.setAvailableQuantity(dto.getAvailableQuantity());
-       product.setTypeOfProduct(dto.getTypeOfProduct());
-       product.setPrice(dto.getPrice());
-
-       if(product.getAvailableQuantity() < 0){
-
-           return Response.builder().message("la cantidad disponible no puede ser igual a cero.").build();
+           return Response.builder().message("El producto no existe.").build();
 
        }
 
-       if(product.getPrice() <= 0){
+       if(productName != null){
+
+           return Response.builder().message("Ya hay un producto con el nombre que desea colocar.").build();
+
+       }
+
+
+       productChange.setProductName(dto.getProductName());
+       productChange.setTypeOfProduct(dto.getTypeOfProduct());
+       productChange.setAvailableQuantity(dto.getAvailableQuantity());
+       productChange.setPrice(dto.getPrice());
+
+       if(productChange.getPrice() <= 0){
 
            return Response.builder().message("El precio no puede ser igual a cero.").build();
 
        }
-       productRepository.save(product);
-       return Response.builder().message("El precio del producto se actualizo!").data("Price = " + product.getPrice()).build();
+
+       if(productChange.getAvailableQuantity() < 0){
+           productChange.setAvailableQuantity(0);
+            productRepository.save(productChange);
+           return Response.builder().message("la cantidad disponible no puede ser menor a cero.").build();
+
+       }
+
+       productRepository.save(productChange);
+       return Response.builder().message("El producto se actualizo!").data(productChange).build();
 
    }
 
@@ -118,16 +142,56 @@ public class ProductService {
 
         Product product = productOptional.get();
 
-        return Response.builder().data(product.getProductName()).build();
+        return Response.builder().data(product).build();
 
     }
 
-    return Response.builder().message("No eiste el producto").build();
+    return Response.builder().message("No hay un producto con esa id.").build();
 
 
    }
 
 
+    public Response buy(InBuyDTO dto){
+
+        User user = userRepository.findByEmail(dto.getEmail());
+
+        Product product = productRepository.findByProductName(dto.getProductName());
+
+        if(user == null){
+
+            return Response.builder().message("No hay un usuario con ese email").build();
+
+        }
+
+        if(product == null){
+
+            return Response.builder().message("El producto que desea comprar no esta en la base de datos.").build();
+
+        }
+
+        if(user.getCoins() < product.getPrice()){
+
+            return Response.builder().message("no tienes suficiente dinero.").build();
+
+        }
+
+        if(product.getAvailableQuantity() <= 0){
+
+            return Response.builder().message("El producto no se encuentra disponible.").build();
+
+        }
+
+        user.setCoins(user.getCoins() - product.getPrice());
+        product.setAvailableQuantity(product.getAvailableQuantity() - 1);
+
+        user.getProducts().add(product);
+
+        productRepository.save(product);
+        userRepository.save(user);
+        return Response.builder().message("El produco fue comprado con exito!").build();
+
+    }
 
 }
 

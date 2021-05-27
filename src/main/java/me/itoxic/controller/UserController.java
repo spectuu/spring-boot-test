@@ -30,6 +30,13 @@ public class UserController {
 
     }
 
+    @GetMapping("/allUsers")
+    private Response getAllProducts(){
+
+        return this.userService.list();
+
+    }
+
     @GetMapping("/findpassword/{password}")
     private Response getByPassword(@PathVariable String password){
 
@@ -39,11 +46,16 @@ public class UserController {
 
 
     @GetMapping("/findcoins/{coins}")
-    private  Response getByCoins(@PathVariable int coins){
-
-        System.out.println("COINS");
+    private Response getByCoins(@PathVariable int coins){
 
         return this.userService.getUserDataCoins(coins);
+    }
+
+    @GetMapping("/findProducts/{email}")
+    private Response getByEmail(@PathVariable String email){
+
+        return this.userService.userProducts(email);
+
     }
 
     @PostMapping("/login")

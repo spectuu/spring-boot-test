@@ -3,6 +3,7 @@ package me.itoxic.controller;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import me.itoxic.dtoProduct.InBuyDTO;
 import me.itoxic.dtoProduct.InCreateProductDTO;
 import me.itoxic.dtoProduct.InDeleteProductDTO;
 import me.itoxic.dtoProduct.InUpdateProductDTO;
@@ -43,10 +44,10 @@ public class ProductController {
 
     }
 
-    @PatchMapping("/updatePrice")
+    @PatchMapping("/updateProduct")
     private Response updateProduct(@RequestBody InUpdateProductDTO dto){
 
-        return this.productService.updatePrice(dto);
+        return this.productService.updateProduct(dto);
 
     }
 
@@ -54,6 +55,13 @@ public class ProductController {
     private Response getProductId(@PathVariable long id){
 
         return this.productService.finById(id);
+
+    }
+
+    @PostMapping("/buy")
+    private Response buy(@RequestBody InBuyDTO dto){
+
+        return this.productService.buy(dto);
 
     }
 }
