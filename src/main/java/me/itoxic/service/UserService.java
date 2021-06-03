@@ -3,6 +3,7 @@ package me.itoxic.service;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import me.itoxic.dtoProduct.InBuyDTO;
+import me.itoxic.dtoProduct.InDeleteProductDTO;
 import me.itoxic.dtoProduct.OutUserProductsDTO;
 import me.itoxic.dtoUser.*;
 import me.itoxic.entity.Product;
@@ -31,7 +32,15 @@ public class UserService {
 
     public Response list() {
         List<User> users = userRepository.findAll();
-        return Response.builder().data(toDTO(users)).message("OK").build();
+        List<OutIdDTO> outIdDTOS = new ArrayList<>();
+        for(User user1: users){
+
+            outIdDTOS.add(OutIdDTO.builder()
+                    .email(user1.getEmail())
+                    .coins(user1.getCoins())
+                    .build());
+        }
+        return Response.builder().data(outIdDTOS).message("OK").build();
     }
 
     public List<UserDTO> toDTO(List<User> users) {
@@ -213,9 +222,10 @@ public class UserService {
 
     }
 
-    public Response userProducts(String email){
+    public Response userProducts(InUserProductsDTO dto){
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(dto.getEmail());
+        List<OutUserProductsDTO> out = new ArrayList<>();
 
         if(user == null){
 
@@ -223,7 +233,16 @@ public class UserService {
 
         }
 
-        return Response.builder().data(user.getProducts()).build();
+        for(Product products: user.getProducts()){
+
+            out.add(OutUserProductsDTO.builder()
+                    .productName(products.getProductName())
+                    .TypeOfProduct(products.getTypeOfProduct())
+                    .build());
+
+        }
+
+        return Response.builder().data(out).build();
 
     }
 

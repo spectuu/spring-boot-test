@@ -51,10 +51,10 @@ public class UserController {
         return this.userService.getUserDataCoins(coins);
     }
 
-    @GetMapping("/findProducts/{email}")
-    private Response getByEmail(@PathVariable String email){
+    @PostMapping("/findProduct")
+    private Response getByEmail(@RequestBody InUserProductsDTO dto){
 
-        return this.userService.userProducts(email);
+        return this.userService.userProducts(dto);
 
     }
 

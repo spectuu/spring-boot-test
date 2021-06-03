@@ -51,13 +51,6 @@ public class ProductController {
 
     }
 
-    @GetMapping("/findId/{id}")
-    private Response getProductId(@PathVariable long id){
-
-        return this.productService.finById(id);
-
-    }
-
     @PostMapping("/buy")
     private Response buy(@RequestBody InBuyDTO dto){
 

@@ -134,24 +134,6 @@ public class ProductService {
 
    }
 
-   public Response finById(Long id){
-
-    Optional<Product> productOptional = productRepository.findById(id);
-
-    if(productOptional.isPresent()) {
-
-        Product product = productOptional.get();
-
-        return Response.builder().data(product).build();
-
-    }
-
-    return Response.builder().message("No hay un producto con esa id.").build();
-
-
-   }
-
-
     public Response buy(InBuyDTO dto){
 
         User user = userRepository.findByEmail(dto.getEmail());

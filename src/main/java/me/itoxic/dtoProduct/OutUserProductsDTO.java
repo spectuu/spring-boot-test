@@ -11,9 +11,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class OutUserProductsDTO {
 
-    private String email;
-    private String productName;
-    private int quantity;
 
+    private String productName;
+    private String TypeOfProduct;
 
 }
